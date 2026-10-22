@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decision Tree | ML Bloom</title>
+<style>
+:root{--green:#426b50;--leaf:#8eae83;--cream:#faf8ef;--ink:#243a2c;--yellow:#f5d98b;--soft:#e8f0e3}
+*{box-sizing:border-box;scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:Arial,sans-serif;line-height:1.7}
+nav{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:15px 6%;background:#faf8eff2;border-bottom:1px solid #dfe8d8}
+nav b{color:var(--green);font-size:19px}nav a{color:var(--green);text-decoration:none;font-weight:bold}
+.hero{padding:65px 7%;background:linear-gradient(120deg,#e5efdd,#fbf3d8);border-radius:0 0 36px 36px}
+.tag{background:#fff;padding:7px 13px;border-radius:20px;font-size:12px;font-weight:bold;color:var(--green)}
+h1{font-size:clamp(40px,7vw,68px);line-height:1.1;margin:22px 0;max-width:700px}
+h2{color:var(--green);font-size:28px}
+p{color:#58685b}
+.btn{display:inline-block;background:var(--green);color:white;text-decoration:none;padding:12px 19px;border-radius:12px;border:0;cursor:pointer;font-weight:bold}
+main{max-width:1000px;margin:auto;padding:25px}
+section{padding:27px 0;scroll-margin-top:75px}
+.card{background:white;border:1px solid #e1e9dc;border-radius:20px;padding:23px;margin:14px 0;box-shadow:0 8px 25px #304c3010}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.icon{font-size:32px}
+.diagram{overflow-x:auto;padding:15px 0;text-align:center}
+.node{display:inline-block;background:#e6f0df;border:2px solid #88a97f;border-radius:13px;padding:10px 15px;font-weight:bold;min-width:120px}
+.leaf{background:#fff0c6;border-color:#dfc36b}
+.branches{display:flex;justify-content:center;gap:30px;position:relative;margin-top:25px}
+.branch{flex:1;min-width:100px;max-width:240px}
+.line{height:26px;width:2px;background:#91a68a;margin:auto}
+.branch small{display:block;color:#426b50;font-weight:bold;margin:5px}
+label{display:block;font-weight:bold;margin:14px 0 6px}
+select{width:100%;padding:12px;border:1px solid #cddbc6;border-radius:10px;background:#fff;font-size:16px}
+.result{padding:15px;background:var(--soft);border-radius:12px;font-weight:bold;color:var(--green);margin-top:15px}
+.options button{display:block;width:100%;text-align:left;padding:12px;margin:9px 0;border:1px solid #dce7d5;border-radius:10px;background:#f3f7ee;cursor:pointer;color:var(--ink);font-size:15px}
+.options button:hover{background:#e5efd9}
+footer{text-align:center;padding:30px;background:#e7efdf;margin-top:35px}
+@media(max-width:520px){.branches{gap:8px}.node{padding:8px 5px;min-width:88px;font-size:12px}.branch{min-width:90px}}
+</style>
+</head>
+<body>
+<nav><b>🌿 ML BLOOM</b><a href="#learn">Explore ↓</a></nav>
+<header class="hero">
+<span class="tag">MACHINE LEARNING · BLOG 03</span>
+<h1>Big decisions start with little questions. 🌳</h1>
+<p>Discover how Decision Trees learn from data by asking a series of simple questions.</p>
+<a class="btn" href="#learn">Let's explore →</a>
+</header>
+<main id="learn">
+<section>
+<h2>01 — What is a Decision Tree?</h2>
+<div class="card">
+<p>A Decision Tree is a supervised machine learning algorithm used for classification and regression. It makes predictions by splitting data according to feature-based questions.</p>
+<p>Think of it like a flowchart: answer one question, follow a branch, and continue until you reach a final prediction.</p>
+</div>
+<div class="grid">
+<div class="card"><div class="icon">🎓</div><h3>Student results</h3><p>Explore whether study habits and attendance relate to passing an exam.</p></div>
+<div class="card"><div class="icon">🏡</div><h3>House prices</h3><p>Estimate prices from features such as size and location.</p></div>
+<div class="card"><div class="icon">🛍️</div><h3>Shopping choices</h3><p>Classify customer choices using patterns in past data.</p></div>
+</div>
+</section>
+<section>
+<h2>02 — See the tree in action 🌱</h2>
+<div class="card">
+<p>Example: a simplified study decision tree. Follow the branches to see how the questions lead to a prediction.</p>
+<div class="diagram">
+<div class="node">Study ≥ 3 hours?</div>
+<div class="branches">
+<div class="branch"><small>YES ↓</small><div class="line"></div><div class="node">Attendance ≥ 75%?</div>
+<div class="branches">
+<div class="branch"><small>YES ↓</small><div class="line"></div><div class="node leaf">Likely Pass 🎓</div></div>
+<div class="branch"><small>NO ↓</small><div class="line"></div><div class="node leaf">Needs Support 📚</div></div>
+</div>
+</div>
+<div class="branch"><small>NO ↓</small><div class="line"></div><div class="node leaf">More Study Needed ✏️</div></div>
+</div>
+</div>
+<p><small>Illustrative example only; real models learn splits from training data.</small></p>
+</div>
+</section>
+<section>
+<h2>03 — Try the prediction game 🎮</h2>
+<div class="card">
+<p>Choose the example student's study time and attendance to follow the teaching rules above.</p>
+<label for="study">Daily study hours</label>
+<select id="study" onchange="predict()">
+<option value="1">Less than 3 hours</option>
+<option value="4">3 hours or more</option>
+</select>
+<label for="attendance">Attendance</label>
+<select id="attendance" onchange="predict()">
+<option value="90">75% or more</option>
+<option value="60">Below 75%</option>
+</select>
+<div class="result" id="result" aria-live="polite">Prediction: Likely Pass 🎓</div>
+<p><small>This is a rule-based classroom demonstration, not a trained or validated prediction model.</small></p>
+</div>
+</section>
+<section>
+<h2>04 — How does it learn?</h2>
+<div class="grid">
+<div class="card"><h3>① Collect data</h3><p>Gather examples with input features and known outcomes.</p></div>
+<div class="card"><h3>② Find a split</h3><p>Choose a feature and threshold that help separate the target outcomes.</p></div>
+<div class="card"><h3>③ Grow branches</h3><p>Repeat splitting on the resulting groups, subject to stopping rules.</p></div>
+<div class="card"><h3>④ Make a prediction</h3><p>Use the reached leaf to predict a class or numeric value.</p></div>
+</div>
+</section>
+<section>
+<h2>05 — Advantages & limitations</h2>
+<div class="grid">
+<div class="card"><h3>🌟 Advantages</h3><p>• Easy to visualize and explain<br>• Can model nonlinear patterns<br>• Works with classification and regression<br>• Usually needs little feature scaling</p></div>
+<div class="card"><h3>🔍 Limitations</h3><p>• Can overfit training data<br>• Small data changes may alter the tree<br>• A deep tree can become complex<br>• Pruning or depth limits may help</p></div>
+</div>
+</section>
+<section>
+<h2>06 — Quick quiz 🧠</h2>
+<div class="card">
+<p><b>Q1. A Decision Tree looks most like which structure?</b></p>
+<div class="options">
+<button onclick="quiz(0,0)">A. A flowchart with branches</button>
+<button onclick="quiz(0,1)">B. A straight line only</button>
+<button onclick="quiz(0,2)">C. A music playlist</button>
+</div><p id="q0"></p>
+<hr>
+<p><b>Q2. What is a leaf node?</b></p>
+<div class="options">
+<button onclick="quiz(1,0)">A. The first question</button>
+<button onclick="quiz(1,1)">B. A final prediction node</button>
+<button onclick="quiz(1,2)">C. A row in a spreadsheet only</button>
+</div><p id="q1"></p>
+<hr>
+<p><b>Q3. Decision Trees can be used for:</b></p>
+<div class="options">
+<button onclick="quiz(2,0)">A. Classification only</button>
+<button onclick="quiz(2,1)">B. Regression only</button>
+<button onclick="quiz(2,2)">C. Both classification and regression</button>
+</div><p id="q2"></p>
+</div>
+</section>
+<section>
+<h2>07 — Conclusion</h2>
+<div class="card">
+<p>Decision Trees are intuitive machine learning models that split data into smaller groups using feature-based rules. Their flowchart-like structure makes predictions easier to understand.</p>
+<p><b>Remember:</b> the quality of a tree depends on the data, the chosen splits, and how well the model generalizes to unseen examples.</p>
+</div>
+</section>
+<section>
+<h2>Learn more 📚</h2>
+<div class="card">
+<p><a href="https://scikit-learn.org/stable/modules/tree.html" target="_blank">Scikit-learn — Decision Trees</a></p>
+<p><a href="https://developers.google.com/machine-learning/decision-forests" target="_blank">Google — Decision Forests guide</a></p>
+</div>
+</section>
+</main>
+<footer>🌿 Made with care for Machine Learning · ML Bloom Blog 03</footer>
+<script>
+function predict(){
+const study=Number(document.getElementById('study').value);
+const attendance=Number(document.getElementById('attendance').value);
+let msg;
+if(study<3){msg='Prediction: More Study Needed ✏️';}
+else if(attendance>=75){msg='Prediction: Likely Pass 🎓';}
+else{msg='Prediction: Needs Support 📚';}
+document.getElementById('result').textContent=msg;
+}
+const correct=[0,1,2];
+function quiz(q,a){
+const el=document.getElementById('q'+q);
+if(a===correct[q]){
+el.textContent='Correct! Great job! 🎉';el.style.color='#287444';
+}else{
+el.textContent='Not quite — try again! 🌱';el.style.color='#a34b43';
+}
+}
+predict();
+</script>
+</body>
+</html>
